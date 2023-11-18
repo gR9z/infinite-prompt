@@ -1,9 +1,12 @@
 'use client';
 
+import { useState } from 'react';
+import axios from 'axios';
 import {
   Check,
   Code,
   ImageIcon,
+  Loader,
   MessageSquare,
   Music,
   VideoIcon,
@@ -59,6 +62,21 @@ const tools = [
 
 export const ProModal = () => {
   const proModal = useProModal();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubscribe = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get('/api/stripe');
+      window.location.href = response.data.url;
+    } catch (error) {
+      1;
+      console.log(error, 'STRIPE_CLIENT_ERROR');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Dialog open={proModal.isOpen} onOpenChange={proModal.onClose}>
       <DialogContent>
@@ -89,9 +107,19 @@ export const ProModal = () => {
           </DialogTitle>
         </DialogHeader>
         <DialogFooter>
-          <Button size="lg" variant="premium" className="w-full">
-            S'abonner
-            <Zap className="w-4 h-4 ml-2 fill-white" />
+          <Button
+            onClick={onSubscribe}
+            size="lg"
+            variant="premium"
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Chargement...' : "S'abonner"}
+            {isLoading ? (
+              <Loader className="w-4 h-4 ml-2 fill-white animate-spin" />
+            ) : (
+              <Zap className="w-4 h-4 ml-2 fill-white" />
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
