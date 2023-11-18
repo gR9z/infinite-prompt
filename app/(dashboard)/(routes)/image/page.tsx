@@ -24,10 +24,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Card, CardFooter } from '@/components/ui/card';
+import { useProModal } from '@/hooks/use-pro-modal';
 
 import { amountOptions, formSchema, resolutionOptions } from './constants';
 
 const ImagePage = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const [images, setImages] = useState<string[]>([]);
 
@@ -55,7 +57,9 @@ const ImagePage = () => {
 
       form.reset();
     } catch (error: any) {
-      // TODO Open Premium Modal
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      }
       console.log(error);
     } finally {
       router.refresh();
