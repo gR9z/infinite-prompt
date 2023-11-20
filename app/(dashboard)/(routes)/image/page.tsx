@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import * as z from 'zod';
 import { Download, ImageIcon } from 'lucide-react';
@@ -15,7 +16,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Empty } from '@/components/empty';
 import { Loader } from '@/components/loader';
-import { cn } from '@/lib/utils';
 import {
   Select,
   SelectContent,
@@ -59,8 +59,9 @@ const ImagePage = () => {
     } catch (error: any) {
       if (error?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error('Oops ! Quelque chose a mal tourné... ' + error);
       }
-      console.log(error);
     } finally {
       router.refresh();
     }

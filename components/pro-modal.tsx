@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import {
   Check,
@@ -70,8 +71,7 @@ export const ProModal = () => {
       const response = await axios.get('/api/stripe');
       window.location.href = response.data.url;
     } catch (error) {
-      1;
-      console.log(error, 'STRIPE_CLIENT_ERROR');
+      toast.error('Oops ! Quelque chose a mal tourné...' + error);
     } finally {
       setIsLoading(false);
     }

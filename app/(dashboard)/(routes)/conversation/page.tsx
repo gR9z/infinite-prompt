@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import * as z from 'zod';
 import { MessageSquare } from 'lucide-react';
@@ -54,8 +55,9 @@ const ConversationPage = () => {
     } catch (error: any) {
       if (error?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error('Oops ! Quelque chose a mal tourné... ' + error);
       }
-      console.log(error);
     } finally {
       router.refresh();
     }
